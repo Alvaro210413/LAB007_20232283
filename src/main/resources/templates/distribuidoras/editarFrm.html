@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<!-- FORMULARIO DE DISTRIBUIDORAS (3.4) | lo usan nuevaDistribuidora() y editarDistribuidoras();
+     envía a guardarDistribuidora() -->
+<head th:replace="~{fragments/base :: head(${distribuidora.iddistribuidora == null} ? 'Nueva Distribuidora' : 'Editar Distribuidora')}"></head>
+<body>
+<div class="container">
+    <nav th:replace="~{fragments/header :: navbar('distribuidoras')}"></nav>
+
+    <h3 class="text-center"
+        th:text="${distribuidora.iddistribuidora == null} ? 'Nueva Distribuidora' : 'Editar Distribuidora'"></h3>
+
+    <!-- Mismo funcionamiento que el editarFrm de juegos, pero con el objeto "distribuidora" -->
+    <form method="post" th:action="@{/distribuidoras/guardar}" th:object="${distribuidora}">
+
+        <!-- id oculto: vacío = nueva, con número = edición -->
+        <input type="hidden" th:field="*{iddistribuidora}">
+
+        <div class="mb-3">
+            <label class="form-label" for="nombre">Nombre</label>
+            <input type="text" class="form-control" th:field="*{nombre}" th:errorclass="is-invalid">
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="descripcion">Descripción</label>
+            <textarea class="form-control" rows="2" th:field="*{descripcion}" th:errorclass="is-invalid"></textarea>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="web">URL Web</label>
+            <input type="text" class="form-control" th:field="*{web}" th:errorclass="is-invalid">
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('web')}" th:errors="*{web}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="fundacion">Fundación</label>
+            <input type="text" class="form-control" th:field="*{fundacion}" th:errorclass="is-invalid">
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('fundacion')}" th:errors="*{fundacion}"></div>
+        </div>
+
+        <!-- select de países: "listaPaises" la manda el controller -->
+        <div class="mb-3">
+            <label class="form-label" for="sede">Sede</label>
+            <select class="form-select" th:field="*{sede}" th:errorclass="is-invalid">
+                <option value="">- Seleccione -</option>
+                <option th:each="p : ${listaPaises}" th:value="${p.idpais}" th:text="${p.nombre}"></option>
+            </select>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('sede')}" th:errors="*{sede}"></div>
+        </div>
+
+        <!-- Cancelar vuelve a la lista; Registrar (nueva) o Actualizar (editar) -->
+        <a class="btn btn-danger" th:href="@{/distribuidoras/lista}">Cancelar</a>
+        <button type="submit" class="btn btn-primary"
+                th:text="${distribuidora.iddistribuidora == null} ? 'Registrar' : 'Actualizar'"></button>
+    </form>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+</div>
+<th:block th:replace="~{fragments/base :: scripts}"></th:block>
+</body>
+</html>

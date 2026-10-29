@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<!-- JUEGO COMPRADO | solo de relleno, ningún controller lo abre -->
+<head th:replace="~{fragments/base :: head('Juego comprado')}"></head>
+<body>
+<div class="container">
+    <nav th:replace="~{fragments/header :: navbar('juegos')}"></nav>
+
+    <!-- Este template es parte de la estructura del Anexo, pero no se usa en este laboratorio -->
+    <div class="text-center my-5">
+        <i class="bi bi-bag-check-fill text-success" style="font-size: 4rem;"></i>
+        <h3>¡Gracias por tu compra!</h3>
+        <a class="btn btn-primary btn-sm mt-2" th:href="@{/juegos/lista}">Volver a la lista</a>
+    </div>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+</div>
+<th:block th:replace="~{fragments/base :: scripts}"></th:block>
+</body>
+</html>

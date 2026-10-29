@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<!-- LISTA DE JUEGOS (2.1.2) | la abre listaJuegos() del JuegosController -->
+<head th:replace="~{fragments/base :: head('Lista de Juegos')}"></head>
+<body>
+<div class="container">
+    <!-- barra de arriba (fragments/header.html); 'juegos' resalta ese link -->
+    <nav th:replace="~{fragments/header :: navbar('juegos')}"></nav>
+
+    <h2 class="text-center">Lista de Juegos para la Venta</h2>
+
+    <!-- botón que va a GET /juegos/nuevo -->
+    <a class="btn btn-primary btn-sm my-3" th:href="@{/juegos/nuevo}">
+        <i class="bi bi-plus-circle"></i> Nuevo Juego
+    </a>
+
+    <!-- Mensajes del controller (addFlashAttribute): verde = msg, rojo = msgError -->
+    <div th:if="${msg != null}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle-fill"></i> <span th:text="${msg}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <div th:if="${msgError != null}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle-fill"></i> <span th:text="${msgError}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <table class="table table-striped align-middle small">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th></th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Plataforma</th>
+            <th>Distribuidora</th>
+            <th>Precio (S/)</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Una fila por cada juego. "juego" es un nombre libre (como la i de un for);
+             "listaJuegos" debe ser igual al nombre del model.addAttribute del controller.
+             stat.count = número de fila (1, 2, 3...) -->
+        <tr th:each="juego, stat : ${listaJuegos}">
+            <td th:text="${stat.count}"></td>
+            <!-- imagen: al hacer clic va al detalle (vista.html). Si no tiene imagen, sale un ícono -->
+            <td>
+                <a th:href="@{/juegos/vista(id=${juego.idjuego})}">
+                    <img th:if="${juego.image != null}" th:src="${juego.image}" alt="imagen"
+                         style="width: 60px; height: 75px; object-fit: cover;">
+                    <i th:if="${juego.image == null}" class="bi bi-image fs-1 text-secondary"></i>
+                </a>
+            </td>
+            <td>
+                <span th:text="${juego.nombre}"></span>
+                <!-- el género se muestra junto al nombre -->
+                <span class="badge text-bg-warning" th:text="${juego.genero.nombre}"></span>
+            </td>
+            <td style="max-width: 300px;" th:text="${juego.descripcion}"></td>
+            <!-- plataforma y distribuidora son otras entidades: por eso .nombre -->
+            <td th:text="${juego.plataforma.nombre}"></td>
+            <td th:text="${juego.distribuidora.nombre}"></td>
+            <td th:text="${juego.precio}"></td>
+            <!-- editar -> GET /juegos/editar?id=... -->
+            <td>
+                <a class="btn btn-primary btn-sm" th:href="@{/juegos/editar(id=${juego.idjuego})}">
+                    <i class="bi bi-pencil-square"></i>
+                </a>
+            </td>
+            <!-- borrar -> GET /juegos/borrar?id=... (pide confirmación antes) -->
+            <td>
+                <a class="btn btn-danger btn-sm" th:href="@{/juegos/borrar(id=${juego.idjuego})}"
+                   onclick="return confirm('¿Seguro que deseas borrar este juego?')">
+                    <i class="bi bi-trash-fill"></i>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+</div>
+<th:block th:replace="~{fragments/base :: scripts}"></th:block>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<!-- DETALLE DE UN JUEGO | la abre vistaJuego() (no lo pide el lab, el archivo lo exige el Anexo) -->
+<head th:replace="~{fragments/base :: head('Detalle del Juego')}"></head>
+<body>
+<div class="container">
+    <nav th:replace="~{fragments/header :: navbar('juegos')}"></nav>
+
+    <!-- Detalle de un juego (GET /juegos/vista?id=...) -->
+    <div class="card mx-auto" style="max-width: 600px;">
+        <div class="row g-0">
+            <div class="col-4 d-flex align-items-center justify-content-center">
+                <img th:if="${juego.image != null}" th:src="${juego.image}" class="img-fluid rounded-start" alt="imagen">
+                <i th:if="${juego.image == null}" class="bi bi-image text-secondary" style="font-size: 5rem;"></i>
+            </div>
+            <div class="col-8">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <span th:text="${juego.nombre}"></span>
+                        <span class="badge text-bg-warning" th:text="${juego.genero.nombre}"></span>
+                    </h5>
+                    <p class="card-text small" th:text="${juego.descripcion}"></p>
+                    <p class="card-text small mb-1"><b>Plataforma:</b> <span th:text="${juego.plataforma.nombre}"></span></p>
+                    <p class="card-text small mb-1"><b>Distribuidora:</b> <span th:text="${juego.distribuidora.nombre}"></span></p>
+                    <p class="card-text"><b>S/ <span th:text="${juego.precio}"></span></b></p>
+                    <a class="btn btn-secondary btn-sm" th:href="@{/juegos/lista}">Volver</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+</div>
+<th:block th:replace="~{fragments/base :: scripts}"></th:block>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<!-- FORMULARIO DE JUEGOS (2.4) | lo usan nuevoJuegos() y editarJuegos(); envía a guardarJuegos()
+     Si el juego no tiene id es "Nuevo", si tiene id es "Editar" -->
+<head th:replace="~{fragments/base :: head(${juego.idjuego == null} ? 'Nuevo Juego' : 'Editar Juego')}"></head>
+<body>
+<div class="container">
+    <nav th:replace="~{fragments/header :: navbar('juegos')}"></nav>
+
+    <h3 class="text-center" th:text="${juego.idjuego == null} ? 'Nuevo Juego' : 'Editar Juego'"></h3>
+
+    <!-- th:object une el form con el objeto "juego" que manda el controller (@ModelAttribute("juego"))
+         th:field="*{nombre}" = juego.nombre (pone name, id y el valor actual)
+         th:errorclass="is-invalid" = si ese campo tiene error, se pinta en rojo
+         th:errors="*{nombre}" = muestra el mensaje de error del campo -->
+    <form method="post" th:action="@{/juegos/guardar}" th:object="${juego}">
+
+        <!-- id oculto: si viene vacío es nuevo, si trae número es edición -->
+        <input type="hidden" th:field="*{idjuego}">
+
+        <div class="mb-3">
+            <label class="form-label" for="nombre">Nombre</label>
+            <input type="text" class="form-control" th:field="*{nombre}" th:errorclass="is-invalid">
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="descripcion">Descripción</label>
+            <textarea class="form-control" rows="2" th:field="*{descripcion}" th:errorclass="is-invalid"></textarea>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></div>
+        </div>
+
+        <!-- En los select, th:field="*{genero}" manda el id elegido y al editar deja marcado el que ya tenía -->
+        <div class="mb-3">
+            <label class="form-label" for="genero">Género</label>
+            <select class="form-select" th:field="*{genero}" th:errorclass="is-invalid">
+                <option value="">- Seleccione -</option>
+                <option th:each="g : ${listaGeneros}" th:value="${g.idgenero}" th:text="${g.nombre}"></option>
+            </select>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('genero')}" th:errors="*{genero}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="plataforma">Plataforma</label>
+            <select class="form-select" th:field="*{plataforma}" th:errorclass="is-invalid">
+                <option value="">- Seleccione -</option>
+                <option th:each="p : ${listaPlataformas}" th:value="${p.idplataforma}" th:text="${p.nombre}"></option>
+            </select>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('plataforma')}" th:errors="*{plataforma}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="distribuidora">Distribuidora</label>
+            <select class="form-select" th:field="*{distribuidora}" th:errorclass="is-invalid">
+                <option value="">- Seleccione -</option>
+                <option th:each="d : ${listaDistribuidoras}" th:value="${d.iddistribuidora}" th:text="${d.nombre}"></option>
+            </select>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('distribuidora')}" th:errors="*{distribuidora}"></div>
+        </div>
+
+        <!-- imagen: sin validación, es opcional -->
+        <div class="mb-3">
+            <label class="form-label" for="image">Imagen URL</label>
+            <input type="text" class="form-control" th:field="*{image}">
+        </div>
+
+        <!-- precio con el "S/" a la izquierda (input-group) -->
+        <div class="mb-3">
+            <label class="form-label" for="precio">Precio</label>
+            <div class="input-group has-validation">
+                <span class="input-group-text">S/</span>
+                <input type="text" class="form-control" th:field="*{precio}" th:errorclass="is-invalid">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('precio')}" th:errors="*{precio}"></div>
+            </div>
+        </div>
+
+        <!-- Cancelar vuelve a la lista; el botón dice Registrar (nuevo) o Actualizar (editar) -->
+        <a class="btn btn-danger" th:href="@{/juegos/lista}">Cancelar</a>
+        <button type="submit" class="btn btn-primary"
+                th:text="${juego.idjuego == null} ? 'Registrar' : 'Actualizar'"></button>
+    </form>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+</div>
+<th:block th:replace="~{fragments/base :: scripts}"></th:block>
+</body>
+</html>

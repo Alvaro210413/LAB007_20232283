@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- Barra de navegación. El parámetro "activo" ('juegos' o 'distribuidoras') resalta el link de la página actual -->
+<nav th:fragment="navbar(activo)" class="navbar navbar-expand bg-primary-subtle mb-2 px-2 rounded-bottom">
+    <a class="navbar-brand" th:href="@{/juegos/lista}" th:text="#{app.titulo}">GameShop3</a>
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" th:classappend="${activo == 'juegos'} ? 'active fw-semibold'"
+               th:href="@{/juegos/lista}">Juegos</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:classappend="${activo == 'distribuidoras'} ? 'active fw-semibold'"
+               th:href="@{/distribuidoras/lista}">Distribuidoras</a>
+        </li>
+    </ul>
+</nav>
+</body>
+</html>
